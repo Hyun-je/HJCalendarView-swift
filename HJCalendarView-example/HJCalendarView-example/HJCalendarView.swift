@@ -78,7 +78,9 @@ protocol HJCalendarViewDelegate: NSObjectProtocol {
     
     func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int)
     
-    func didSelectDay(_ calendarView: HJCalendarView, date:Date?)
+    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date:Date?)
+    
+    func didDeselectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date:Date?)
     
 }
 
@@ -102,6 +104,7 @@ class HJCalendarView: UICollectionView {
 
         // set view
         isPagingEnabled = true
+        allowsMultipleSelection = false
         
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
@@ -129,7 +132,7 @@ class HJCalendarView: UICollectionView {
         
         monthCellArray[0].setPreviousMonth()
         monthCellArray[2].setNextMonth()
-
+        
         delegate = self
         dataSource = self
         
@@ -154,14 +157,21 @@ class HJCalendarView: UICollectionView {
         return (monthCellArray[1].getYear(), monthCellArray[1].getMonth())
         
     }
-
-
-
     
+    func setHighlighted(date: Date, isHighlighted: Bool, color: UIColor) {
+        
+        
+        
+        
+        //cell.setHighlighted(true)
+        
+    }
     
+    func setCount(date: Date, count: Int) {
     
-
+        
     
+    }
 
 }
 
@@ -173,6 +183,7 @@ class HJCalendarView: UICollectionView {
 
 extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
+    
     override func willMove(toWindow newWindow: UIWindow?) {
         super.willMove(toWindow: newWindow)
         
@@ -186,8 +197,12 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             let indexPath = IndexPath(row: 0, section: 1)
             self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
             
+            calendarDelegate?.didChangeCalendar(self, year: monthCellArray[1].getYear()!, month: monthCellArray[1].getMonth()!)
+
+            
         }
     }
+    
     
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -211,6 +226,18 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             
             calendarDelegate?.didChangeCalendar(self, year: monthCellArray[1].getYear()!, month: monthCellArray[1].getMonth()!)
             
+            if let selectedIndexArray = self.indexPathsForSelectedItems {
+                
+                for selectedIndex in selectedIndexArray {
+                    
+                    let cell = cellForItem(at: selectedIndex) as? HJCalendarViewCell
+                    cell?.setHighlighted(false)
+                    
+                }
+                
+                
+            }
+            
         }
         
         let indexPath = IndexPath(row: 0, section: 1)
@@ -223,19 +250,40 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        let cellIndex = collectionViewIndexTransform(index:indexPath.row) - 7
+        let cell = self.cellForItem(at: indexPath) as! HJCalendarViewCell
+        
+        let cellIndex = collectionViewIndexTransform(index:indexPath.row)
         let dateIndex = cellIndex - monthCellArray[indexPath.section].getWeekOfFirstDay()
         
         if dateIndex >= 0 && dateIndex < monthCellArray[indexPath.section].getNumberOfDay() {
             
-            let cell = collectionView.cellForItem(at: indexPath) as! HJCalendarViewCell
-
             let comp = DateComponents(year: monthCellArray[1].getYear(), month: monthCellArray[1].getMonth(), day: dateIndex + 1)
-            calendarDelegate?.didSelectDay(self, date: MonthCell.calendar.date(from: comp))
-
+            calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: MonthCell.calendar.date(from: comp))
+            cell.setHighlighted(true)
+            
         }
         else {
-            calendarDelegate?.didSelectDay(self, date: nil)
+            calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: nil)
+        }
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        
+        let cell = self.cellForItem(at: indexPath) as! HJCalendarViewCell
+        
+        let cellIndex = collectionViewIndexTransform(index:indexPath.row)
+        let dateIndex = cellIndex - monthCellArray[indexPath.section].getWeekOfFirstDay()
+        
+        if dateIndex >= 0 && dateIndex < monthCellArray[indexPath.section].getNumberOfDay() {
+            
+            let comp = DateComponents(year: monthCellArray[1].getYear(), month: monthCellArray[1].getMonth(), day: dateIndex + 1)
+            calendarDelegate?.didDeselectDay(self, indexPath: indexPath, date: MonthCell.calendar.date(from: comp))
+            cell.setHighlighted(false)
+            
+        }
+        else {
+            calendarDelegate?.didDeselectDay(self, indexPath: indexPath, date: nil)
         }
         
     }
@@ -254,7 +302,7 @@ extension HJCalendarView: UICollectionViewDataSource {
         let row = index/7
         let col = index%7
         
-        return col*7 + row
+        return col*7 + row - 7
         
     }
     
@@ -279,9 +327,8 @@ extension HJCalendarView: UICollectionViewDataSource {
         
         cell.indexPath = indexPath
         
-        let cellIndex = collectionViewIndexTransform(index:indexPath.row) - 7
+        let cellIndex = collectionViewIndexTransform(index:indexPath.row)
         let dateIndex = cellIndex - monthCellArray[indexPath.section].getWeekOfFirstDay()
-        
         
         
         if cellIndex < 0 {
@@ -289,7 +336,6 @@ extension HJCalendarView: UICollectionViewDataSource {
             cell.mainLabel.text = stringWeek[cellIndex+7]
             cell.mainLabel.textColor = dayHeaderColor
             cell.setCellType(.DayHeaderCell)
-            
         }
         else if dateIndex >= 0 && dateIndex < monthCellArray[indexPath.section].getNumberOfDay() {
             // 날짜 표시 텍스트
@@ -297,6 +343,8 @@ extension HJCalendarView: UICollectionViewDataSource {
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(dateIndex + 1)"
             
+            let comp = DateComponents(year: monthCellArray[1].getYear(), month: monthCellArray[1].getMonth(), day: dateIndex + 1)
+            cell.date = MonthCell.calendar.date(from: comp)
         }
         else {
             // 빈킨 표시 텍스트

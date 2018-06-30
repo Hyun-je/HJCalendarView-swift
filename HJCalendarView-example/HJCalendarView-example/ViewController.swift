@@ -10,9 +10,8 @@ import UIKit
 
 class ViewController: UIViewController, HJCalendarViewDelegate {
 
-    
-
     @IBOutlet weak var calendarView: HJCalendarView!
+    @IBOutlet weak var calendarLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -36,10 +35,24 @@ class ViewController: UIViewController, HJCalendarViewDelegate {
     
     func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int) {
         print(#function)
+        
+        calendarLabel.text = "\(year) \(month)"
+        
     }
     
-    func didSelectDay(_ calendarView: HJCalendarView, date: Date?) {
+    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) {
         print(#function)
+        
+        let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
+        cell.setHighlighted(true)
+        
+    }
+    
+    func didDeselectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) {
+        
+        let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
+        cell.setHighlighted(false)
+        
     }
 
 

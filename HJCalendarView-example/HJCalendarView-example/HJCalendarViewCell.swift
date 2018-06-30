@@ -22,10 +22,10 @@ class HJCalendarViewCell: UICollectionViewCell {
     
     var indexPath = IndexPath(row: 0, section: 0)
     
-    
     var mainLabel = UILabel()
     var countLabel = UILabel()
     
+    var date:Date? = nil
     
     
     
@@ -36,6 +36,17 @@ class HJCalendarViewCell: UICollectionViewCell {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
+
+        backgroundView = UIView(frame: frame)
+        
+        if frame.width > frame.height {
+            backgroundView?.layer.cornerRadius = frame.height / 4.0
+        }
+        else {
+            backgroundView?.layer.cornerRadius = frame.width / 4.0
+        }
+        backgroundView?.backgroundColor = UIColor.lightGray
+        backgroundView?.isHidden = true
         
         mainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2))
         mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/3)
@@ -64,6 +75,7 @@ class HJCalendarViewCell: UICollectionViewCell {
             mainLabel.font = UIFont.systemFont(ofSize: frame.height/4)
             mainLabel.isHidden = false
             countLabel.isHidden = true
+            date = nil
             
         case .DateCell:
             mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/3)
@@ -74,6 +86,7 @@ class HJCalendarViewCell: UICollectionViewCell {
         case .BlankCell:
             mainLabel.isHidden = true
             countLabel.isHidden = true
+            date = nil
             
         }
         
@@ -89,6 +102,17 @@ class HJCalendarViewCell: UICollectionViewCell {
         }
         
         countLabel.text = countString
+        
+    }
+    
+    func setHighlighted(_ isHighlighted: Bool) {
+        
+        if isHighlighted {
+            backgroundView?.isHidden = false
+        }
+        else {
+            backgroundView?.isHidden = true
+        }
         
     }
     
