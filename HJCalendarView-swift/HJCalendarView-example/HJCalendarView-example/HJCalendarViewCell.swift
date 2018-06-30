@@ -40,14 +40,14 @@ class HJCalendarViewCell: UICollectionViewCell {
         mainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2))
         mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/3)
         mainLabel.textAlignment = .center
-        mainLabel.text = "10"
+        mainLabel.text = ""
         mainLabel.font = UIFont.systemFont(ofSize: frame.height/2)
         addSubview(mainLabel)
         
         countLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height*3/4))
         countLabel.center = CGPoint(x:frame.width/2 , y: frame.height*3/4)
         countLabel.textAlignment = .center
-        countLabel.text = "•••"
+        countLabel.text = ""
         countLabel.font = UIFont.systemFont(ofSize: frame.height/5)
         addSubview(countLabel)
         
