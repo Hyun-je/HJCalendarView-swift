@@ -13,11 +13,15 @@ enum HJCalendarViewCellType {
     
     case DayHeaderCell
     case DateCell
+    case BlankCell
     
 }
 
 
 class HJCalendarViewCell: UICollectionViewCell {
+    
+    var indexPath = IndexPath(row: 0, section: 0)
+    
     
     var mainLabel = UILabel()
     var countLabel = UILabel()
@@ -58,12 +62,18 @@ class HJCalendarViewCell: UICollectionViewCell {
         case .DayHeaderCell:
             mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/2)
             mainLabel.font = UIFont.systemFont(ofSize: frame.height/4)
+            mainLabel.isHidden = false
             countLabel.isHidden = true
             
         case .DateCell:
             mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/3)
             mainLabel.font = UIFont.systemFont(ofSize: frame.height/2)
+            mainLabel.isHidden = false
             countLabel.isHidden = false
+            
+        case .BlankCell:
+            mainLabel.isHidden = true
+            countLabel.isHidden = true
             
         }
         
