@@ -13,59 +13,56 @@ import UIKit
 
 class MonthCell {
     
-    let calendar = Calendar(identifier: .gregorian)
+    static let calendar = Calendar(identifier: .gregorian)
     var date = Date()
     
     var calendarCount = [Int](repeating: 0, count:31)
     
     
     init() {
-        let comp: DateComponents = calendar.dateComponents([.year, .month, .hour], from: Calendar.current.startOfDay(for: date))
-        date = calendar.date(from: comp)!
+        let comp: DateComponents = MonthCell.calendar.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: date))
+        if let date = MonthCell.calendar.date(from: comp) {
+            self.date = date
+        }
     }
     
-    func getYear() -> Int {
-        let comp: DateComponents = calendar.dateComponents([.year, .month, .day], from: date as Date)
-        return comp.year!
+    init(year: Int, month: Int) {
+        let comp = DateComponents(year: year, month: month)
+        if let date = MonthCell.calendar.date(from: comp) {
+            self.date = date
+        }
     }
     
-    func getMonth() -> Int {
-        let comp: DateComponents = calendar.dateComponents([.year, .month, .day], from: date as Date)
-        return comp.month!
+    func getYear() -> Int? {
+        let comp: DateComponents = MonthCell.calendar.dateComponents([.year], from: date as Date)
+        return comp.year
+    }
+    
+    func getMonth() -> Int? {
+        let comp: DateComponents = MonthCell.calendar.dateComponents([.month], from: date as Date)
+        return comp.month
     }
     
     func getNumberOfDay() -> Int {
-        let range = calendar.range(of: .day, in: .month, for: date)!
+        let range = MonthCell.calendar.range(of: .day, in: .month, for: date)!
         return range.count
         
     }
     
     func getWeekOfFirstDay() -> Int {
-        return calendar.dateComponents([.weekday], from: date).weekday! - 1
+        return MonthCell.calendar.dateComponents([.weekday], from: date).weekday! - 1
     }
-    
-    func printDate() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM d, yyyy"
-        print(dateFormatter.string(from:  date))
-    }
-    
-    func getDateString() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMMM, yyyy"
-        return dateFormatter.string(from:  date)
-    }
-    
+
     func setNextMonth() {
         var periodComponents = DateComponents()
         periodComponents.month = 1
-        date = calendar.date(byAdding: periodComponents, to: date)!
+        date = MonthCell.calendar.date(byAdding: periodComponents, to: date)!
     }
     
     func setPreviousMonth() {
         var periodComponents = DateComponents()
         periodComponents.month = -1
-        date = calendar.date(byAdding: periodComponents, to: date)!
+        date = MonthCell.calendar.date(byAdding: periodComponents, to: date)!
     }
     
     
@@ -79,11 +76,9 @@ class MonthCell {
 
 protocol HJCalendarViewDelegate: NSObjectProtocol {
     
-    func didChangeCalendar(_ calendarView: HJCalendarView, calendar:Calendar)
+    func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int)
     
-    func didSelectDay(_ calendarView: HJCalendarView, date:Date)
-    
-    func didSelectBlank(_ calendarView: HJCalendarView)
+    func didSelectDay(_ calendarView: HJCalendarView, date:Date?)
     
 }
 
@@ -129,33 +124,34 @@ class HJCalendarView: UICollectionView {
         
         // init monthcell
         for _ in 0..<3 {
-            let monthCell = MonthCell()
-            monthCellArray.append(monthCell)
+            monthCellArray.append(MonthCell())
         }
         
         monthCellArray[0].setPreviousMonth()
         monthCellArray[2].setNextMonth()
 
-
         delegate = self
         dataSource = self
-
         
     }
     
     
     
     
-    func setCurrentCalendar(_ calendar: Calendar) {
+    func setCurrentCalendar(year: Int, month: Int) {
+
+        for i in 0..<3 {
+            monthCellArray[i] = MonthCell(year: year, month: month)
+        }
         
-        
-        
+        monthCellArray[0].setPreviousMonth()
+        monthCellArray[2].setNextMonth()
         
     }
     
-    func getCurrentCalendar() -> Calendar {
+    func getCurrentCalendar() -> (year: Int?, month: Int?) {
 
-        return monthCellArray[1].calendar
+        return (monthCellArray[1].getYear(), monthCellArray[1].getMonth())
         
     }
 
@@ -213,7 +209,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
                 
             }
             
-            calendarDelegate?.didChangeCalendar(self, calendar: monthCellArray[1].calendar)
+            calendarDelegate?.didChangeCalendar(self, year: monthCellArray[1].getYear()!, month: monthCellArray[1].getMonth()!)
             
         }
         
@@ -234,11 +230,12 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             
             let cell = collectionView.cellForItem(at: indexPath) as! HJCalendarViewCell
 
-            calendarDelegate?.didSelectDay(self, date: monthCellArray[1].date) // !!!!!!!!
+            let comp = DateComponents(year: monthCellArray[1].getYear(), month: monthCellArray[1].getMonth(), day: dateIndex + 1)
+            calendarDelegate?.didSelectDay(self, date: MonthCell.calendar.date(from: comp))
 
         }
         else {
-            calendarDelegate?.didSelectBlank(self)
+            calendarDelegate?.didSelectDay(self, date: nil)
         }
         
     }

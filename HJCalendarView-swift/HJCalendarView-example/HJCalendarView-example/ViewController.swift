@@ -21,6 +21,8 @@ class ViewController: UIViewController, HJCalendarViewDelegate {
         
         calendarView.calendarDelegate = self
         
+        calendarView.setCurrentCalendar(year: 2018, month: 4)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,17 +34,14 @@ class ViewController: UIViewController, HJCalendarViewDelegate {
     
     
     
-    func didChangeCalendar(_ calendarView: HJCalendarView, calendar: Calendar) {
+    func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int) {
         print(#function)
     }
     
-    func didSelectDay(_ calendarView: HJCalendarView, date: Date) {
+    func didSelectDay(_ calendarView: HJCalendarView, date: Date?) {
         print(#function)
     }
-    
-    func didSelectBlank(_ calendarView: HJCalendarView) {
-        print(#function)
-    }
+
 
 
 }
