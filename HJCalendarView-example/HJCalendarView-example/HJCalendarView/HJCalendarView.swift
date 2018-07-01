@@ -103,10 +103,15 @@ class HJCalendarView: UICollectionView {
         calendarArray[2].setNextMonth()
         
         DispatchQueue.main.async {
+            
             self.reloadData()
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+            
+            let indexPath = IndexPath(row: 0, section: 1)
+            self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            
         }
         
         
@@ -122,10 +127,15 @@ class HJCalendarView: UICollectionView {
         calendarArray[2].setNextMonth()
         
         DispatchQueue.main.async {
+            
             self.reloadData()
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+            
+            let indexPath = IndexPath(row: 0, section: 1)
+            self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            
         }
         
     }
@@ -146,27 +156,20 @@ class HJCalendarView: UICollectionView {
 
 extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
-    
-    override func willMove(toWindow newWindow: UIWindow?) {
-        super.willMove(toWindow: newWindow)
-        
-        if newWindow == nil {
-            // UIView disappear
-            
-            
-        } else {
-            // UIView appear
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+
+        DispatchQueue.main.async {
+
+            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
+            self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
             let indexPath = IndexPath(row: 0, section: 1)
             self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
             
-            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
-            calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
-            
         }
+
     }
-    
-    
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
@@ -251,7 +254,7 @@ extension HJCalendarView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         // 7 x 7 array
-        return CGSize(width: self.frame.width/7, height: self.frame.height/7)
+        return CGSize(width: self.frame.width/7.01, height: self.frame.height/7.01)
         
     }
     
