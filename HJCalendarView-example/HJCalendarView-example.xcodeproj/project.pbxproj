@@ -13,6 +13,7 @@
 		9633327520E50B1300A6667C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9633327420E50B1300A6667C /* Assets.xcassets */; };
 		9633327820E50B1300A6667C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9633327620E50B1300A6667C /* LaunchScreen.storyboard */; };
 		9633328020E50B6E00A6667C /* HJCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9633327F20E50B6E00A6667C /* HJCalendarView.swift */; };
+		967A1AB420E875C8009D6567 /* HJCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967A1AB320E875C8009D6567 /* HJCalendar.swift */; };
 		96A4F17420E6808700783C52 /* HJCalendarViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96A4F17320E6808700783C52 /* HJCalendarViewCell.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +26,7 @@
 		9633327720E50B1300A6667C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9633327920E50B1300A6667C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9633327F20E50B6E00A6667C /* HJCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HJCalendarView.swift; sourceTree = "<group>"; };
+		967A1AB320E875C8009D6567 /* HJCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HJCalendar.swift; sourceTree = "<group>"; };
 		96A4F17320E6808700783C52 /* HJCalendarViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HJCalendarViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,6 +63,7 @@
 				9633326D20E50B1200A6667C /* AppDelegate.swift */,
 				9633326F20E50B1200A6667C /* ViewController.swift */,
 				9633327F20E50B6E00A6667C /* HJCalendarView.swift */,
+				967A1AB320E875C8009D6567 /* HJCalendar.swift */,
 				96A4F17320E6808700783C52 /* HJCalendarViewCell.swift */,
 				9633327120E50B1200A6667C /* Main.storyboard */,
 				9633327420E50B1300A6667C /* Assets.xcassets */,
@@ -145,6 +148,7 @@
 				9633326E20E50B1200A6667C /* AppDelegate.swift in Sources */,
 				96A4F17420E6808700783C52 /* HJCalendarViewCell.swift in Sources */,
 				9633328020E50B6E00A6667C /* HJCalendarView.swift in Sources */,
+				967A1AB420E875C8009D6567 /* HJCalendar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
