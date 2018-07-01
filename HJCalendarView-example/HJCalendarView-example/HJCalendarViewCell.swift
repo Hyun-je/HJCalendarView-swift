@@ -37,28 +37,32 @@ class HJCalendarViewCell: UICollectionViewCell {
     public override init(frame: CGRect) {
         super.init(frame: frame)
 
-        backgroundView = UIView(frame: frame)
         
+        // Set selectedBackgroundView
+        //
+        selectedBackgroundView = UIView(frame: frame)
+        selectedBackgroundView?.backgroundColor = UIColor(white: 0.05, alpha: 0.2)
         if frame.width > frame.height {
-            backgroundView?.layer.cornerRadius = frame.height / 4.0
+            selectedBackgroundView?.layer.cornerRadius = frame.height / 5.0
         }
         else {
-            backgroundView?.layer.cornerRadius = frame.width / 4.0
+            selectedBackgroundView?.layer.cornerRadius = frame.width / 5.0
         }
-        backgroundView?.backgroundColor = UIColor.lightGray
-        backgroundView?.isHidden = true
         
+        
+        
+        // Create labels
+        //
         mainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2))
-        mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/3)
+        mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height*2/5)
         mainLabel.textAlignment = .center
-        mainLabel.text = ""
         mainLabel.font = UIFont.systemFont(ofSize: frame.height/2)
         addSubview(mainLabel)
         
         countLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height*3/4))
         countLabel.center = CGPoint(x:frame.width/2 , y: frame.height*3/4)
         countLabel.textAlignment = .center
-        countLabel.text = ""
+        //countLabel.text = "•••"
         countLabel.font = UIFont.systemFont(ofSize: frame.height/5)
         addSubview(countLabel)
         
@@ -75,17 +79,20 @@ class HJCalendarViewCell: UICollectionViewCell {
             mainLabel.font = UIFont.systemFont(ofSize: frame.height/4)
             mainLabel.isHidden = false
             countLabel.isHidden = true
+            selectedBackgroundView?.backgroundColor = UIColor.clear
             date = nil
             
         case .DateCell:
-            mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height/3)
+            mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height*2/5)
             mainLabel.font = UIFont.systemFont(ofSize: frame.height/2)
             mainLabel.isHidden = false
             countLabel.isHidden = false
+            selectedBackgroundView?.backgroundColor = UIColor(white: 0.05, alpha: 0.2)
             
         case .BlankCell:
             mainLabel.isHidden = true
             countLabel.isHidden = true
+            selectedBackgroundView?.backgroundColor = UIColor.clear
             date = nil
             
         }
@@ -104,15 +111,10 @@ class HJCalendarViewCell: UICollectionViewCell {
         countLabel.text = countString
         
     }
-    
-    func setHighlighted(_ isHighlighted: Bool) {
+
+    func setSelectedBackgroundColor(_ color:UIColor) {
         
-        if isHighlighted {
-            backgroundView?.isHidden = false
-        }
-        else {
-            backgroundView?.isHidden = true
-        }
+        selectedBackgroundView?.backgroundColor = color
         
     }
     

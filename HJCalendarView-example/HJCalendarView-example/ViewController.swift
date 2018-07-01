@@ -44,14 +44,12 @@ class ViewController: UIViewController, HJCalendarViewDelegate {
         print(#function)
         
         let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
-        cell.setHighlighted(true)
         
     }
     
     func didDeselectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) {
         
         let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
-        cell.setHighlighted(false)
         
     }
 

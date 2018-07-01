@@ -79,9 +79,7 @@ protocol HJCalendarViewDelegate: NSObjectProtocol {
     func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int)
     
     func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date:Date?)
-    
-    func didDeselectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date:Date?)
-    
+
 }
 
 
@@ -104,12 +102,14 @@ class HJCalendarView: UICollectionView {
 
         // set view
         isPagingEnabled = true
+        allowsSelection = true
         allowsMultipleSelection = false
         
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
         
         clipsToBounds = true
+
         
    
         // set layout
@@ -157,16 +157,7 @@ class HJCalendarView: UICollectionView {
         return (monthCellArray[1].getYear(), monthCellArray[1].getMonth())
         
     }
-    
-    func setHighlighted(date: Date, isHighlighted: Bool, color: UIColor) {
-        
-        
-        
-        
-        //cell.setHighlighted(true)
-        
-    }
-    
+
     func setCount(date: Date, count: Int) {
     
         
@@ -226,18 +217,6 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             
             calendarDelegate?.didChangeCalendar(self, year: monthCellArray[1].getYear()!, month: monthCellArray[1].getMonth()!)
             
-            if let selectedIndexArray = self.indexPathsForSelectedItems {
-                
-                for selectedIndex in selectedIndexArray {
-                    
-                    let cell = cellForItem(at: selectedIndex) as? HJCalendarViewCell
-                    cell?.setHighlighted(false)
-                    
-                }
-                
-                
-            }
-            
         }
         
         let indexPath = IndexPath(row: 0, section: 1)
@@ -249,17 +228,17 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let cell = self.cellForItem(at: indexPath) as! HJCalendarViewCell
-        
+
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
         let dateIndex = cellIndex - monthCellArray[indexPath.section].getWeekOfFirstDay()
         
+        if cellIndex < 0 {
+            calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: nil)
+        }
         if dateIndex >= 0 && dateIndex < monthCellArray[indexPath.section].getNumberOfDay() {
             
             let comp = DateComponents(year: monthCellArray[1].getYear(), month: monthCellArray[1].getMonth(), day: dateIndex + 1)
             calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: MonthCell.calendar.date(from: comp))
-            cell.setHighlighted(true)
             
         }
         else {
@@ -267,26 +246,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
         }
         
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        
-        let cell = self.cellForItem(at: indexPath) as! HJCalendarViewCell
-        
-        let cellIndex = collectionViewIndexTransform(index:indexPath.row)
-        let dateIndex = cellIndex - monthCellArray[indexPath.section].getWeekOfFirstDay()
-        
-        if dateIndex >= 0 && dateIndex < monthCellArray[indexPath.section].getNumberOfDay() {
-            
-            let comp = DateComponents(year: monthCellArray[1].getYear(), month: monthCellArray[1].getMonth(), day: dateIndex + 1)
-            calendarDelegate?.didDeselectDay(self, indexPath: indexPath, date: MonthCell.calendar.date(from: comp))
-            cell.setHighlighted(false)
-            
-        }
-        else {
-            calendarDelegate?.didDeselectDay(self, indexPath: indexPath, date: nil)
-        }
-        
-    }
+
     
 }
 
@@ -329,7 +289,7 @@ extension HJCalendarView: UICollectionViewDataSource {
         
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
         let dateIndex = cellIndex - monthCellArray[indexPath.section].getWeekOfFirstDay()
-        
+
         
         if cellIndex < 0 {
             // 상단 주 표시 텍스트
