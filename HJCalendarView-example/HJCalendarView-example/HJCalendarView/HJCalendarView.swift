@@ -40,10 +40,14 @@ class HJCalendarView: UICollectionView {
     private var calendarArray = [HJCalendar]()
 
     
-    @IBInspectable var dayHeaderColor       = UIColor.gray
-    @IBInspectable var dateColor            = UIColor.black
-    @IBInspectable var dateSelectionColor   = UIColor(white: 0.05, alpha: 0.1)
+    @IBInspectable var headerColor:UIColor     = UIColor.gray
+    @IBInspectable var dayColor:UIColor        = UIColor.black
+    @IBInspectable var saturdayColor:UIColor   = UIColor.blue
+    @IBInspectable var sundayColor:UIColor     = UIColor.red
+    @IBInspectable var subTextColor:UIColor    = UIColor.orange
+    @IBInspectable var selectionColor:UIColor  = UIColor(white: 0.05, alpha: 0.1)
     
+
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -184,7 +188,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
         let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
         
         if cellIndex < 0 {
-            calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
+            //calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
         }
         if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
             
@@ -243,21 +247,33 @@ extension HJCalendarView: UICollectionViewDataSource {
         if cellIndex < 0 {
             // 상단 주 표시 텍스트
             cell.mainLabel.text = stringWeek[cellIndex+7]
-            cell.mainLabel.textColor = dayHeaderColor
+            cell.mainLabel.textColor = headerColor
             cell.setCellType(.DayHeaderCell)
         }
         else if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
             
             // 날짜 표시 텍스트
-            cell.mainLabel.textColor = dateColor
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(dateIndex + 1)"
+
+            // 주말 표시
+            if cellIndex % 7 == 0 {
+                cell.mainLabel.textColor = sundayColor
+            }
+            else if cellIndex % 7 == 6 {
+                cell.mainLabel.textColor = saturdayColor
+            }
+            else {
+                cell.mainLabel.textColor = dayColor
+            }
+            
             
             let dataComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
             
             cell.dateComponents = dataComponents
             cell.subLabel.text = calendarDataSource?.calendarView(self, indexPath: indexPath, dateComponents:dataComponents)
-
+            cell.subLabel.textColor = subTextColor
+            
         }
         else {
             // 빈킨 표시 텍스트
