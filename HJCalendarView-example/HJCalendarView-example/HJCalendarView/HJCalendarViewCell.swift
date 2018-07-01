@@ -20,10 +20,13 @@ enum HJCalendarViewCellType {
 
 class HJCalendarViewCell: UICollectionViewCell {
     
+    var dateComponents:DateComponents? = nil
+    
     var mainLabel = UILabel()
     var subLabel = UILabel()
     
-    var date:Date? = nil
+    static var selectedBackgroundColor = UIColor(white: 0.05, alpha: 0.1)
+    
     
     
     
@@ -39,7 +42,7 @@ class HJCalendarViewCell: UICollectionViewCell {
         // Set selectedBackgroundView
         //
         selectedBackgroundView = UIView(frame: frame)
-        selectedBackgroundView?.backgroundColor = UIColor(white: 0.05, alpha: 0.2)
+        selectedBackgroundView?.backgroundColor = HJCalendarViewCell.selectedBackgroundColor
         if frame.width > frame.height {
             selectedBackgroundView?.layer.cornerRadius = frame.height / 5.0
         }
@@ -54,14 +57,13 @@ class HJCalendarViewCell: UICollectionViewCell {
         mainLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2))
         mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height*2/5)
         mainLabel.textAlignment = .center
-        mainLabel.font = UIFont.systemFont(ofSize: frame.height/2)
+        mainLabel.font = UIFont.systemFont(ofSize: frame.height*0.45)
         addSubview(mainLabel)
         
         subLabel = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height*3/4))
-        subLabel.center = CGPoint(x:frame.width/2 , y: frame.height*3/4)
+        subLabel.center = CGPoint(x:frame.width/2 , y: frame.height*0.77)
         subLabel.textAlignment = .center
-        //subLabel.text = "34"
-        subLabel.font = UIFont.systemFont(ofSize: frame.height/5)
+        subLabel.font = UIFont.systemFont(ofSize: frame.height*0.23)
         addSubview(subLabel)
         
     }
@@ -78,20 +80,20 @@ class HJCalendarViewCell: UICollectionViewCell {
             mainLabel.isHidden = false
             subLabel.isHidden = true
             selectedBackgroundView?.backgroundColor = UIColor.clear
-            date = nil
+            dateComponents = nil
             
         case .DateCell:
             mainLabel.center = CGPoint(x:frame.width/2 , y: frame.height*2/5)
-            mainLabel.font = UIFont.systemFont(ofSize: frame.height/2)
+            mainLabel.font = UIFont.systemFont(ofSize: frame.height*0.45)
             mainLabel.isHidden = false
             subLabel.isHidden = false
-            selectedBackgroundView?.backgroundColor = UIColor(white: 0.05, alpha: 0.2)
+            selectedBackgroundView?.backgroundColor = HJCalendarViewCell.selectedBackgroundColor
             
         case .BlankCell:
             mainLabel.isHidden = true
             subLabel.isHidden = true
             selectedBackgroundView?.backgroundColor = UIColor.clear
-            date = nil
+            dateComponents = nil
             
         }
         

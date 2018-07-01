@@ -13,6 +13,7 @@ class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDa
 
     @IBOutlet weak var calendarView: HJCalendarView!
     @IBOutlet weak var calendarLabel: UILabel!
+    @IBOutlet weak var calendarSelectionLabel: UILabel!
     
     
     override func viewDidLoad() {
@@ -39,25 +40,57 @@ class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDa
         print(#function)
         
         calendarLabel.text = "\(year) \(month)"
+        calendarSelectionLabel.text = ""
         
     }
     
-    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) {
+    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) {
         print(#function)
-        
-        let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
-        
-    }
-    
-    func didDeselectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) {
-        
-        let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
+
+        if let year = dateComponents?.year,
+           let month = dateComponents?.month,
+           let day = dateComponents?.day {
+            calendarSelectionLabel.text = "\(year) \(month) \(day)"
+        }
         
     }
     
-    func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) -> String {
+    func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) -> String {
         
-        return "test"
+        if let year = dateComponents?.year,
+            let month = dateComponents?.month,
+            let day = dateComponents?.day {
+            
+            print("\(year) \(month) \(day)")
+
+            if (year == 2018 && month == 3 && day == 15) {
+                
+                return "▪︎▪︎"
+                
+            }
+            
+            if (year == 2018 && month == 4 && day == 5) {
+                
+                return "★★"
+                
+            }
+            
+            if (year == 2018 && month == 4 && day == 10) {
+                
+                return "★"
+                
+            }
+            
+            if (year == 2018 && month == 4 && day == 27) {
+                
+                return "★★★"
+                
+            }
+            
+        }
+        
+        
+        return ""
         
     }
 

@@ -15,13 +15,13 @@ protocol HJCalendarViewDelegate: NSObjectProtocol {
     
     func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int)
     
-    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date:Date?)
+    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?)
 
 }
 
 protocol HJCalendarViewDataSource: NSObjectProtocol {
     
-    func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, date:Date?) -> String
+    func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) -> String
     
     //func calendarView(_ calendarView: HJCalendarView, colorForItemAt indexPath: IndexPath, date:Date?) -> UIColor
     
@@ -40,16 +40,16 @@ class HJCalendarView: UICollectionView {
     private var calendarArray = [HJCalendar]()
 
     
-    @IBInspectable var dayHeaderColor = UIColor.gray
-    @IBInspectable var dateColor = UIColor.black
-    @IBInspectable var dateSelectionColor = UIColor(white: 0.05, alpha: 0.2)
+    @IBInspectable var dayHeaderColor       = UIColor.gray
+    @IBInspectable var dateColor            = UIColor.black
+    @IBInspectable var dateSelectionColor   = UIColor(white: 0.05, alpha: 0.1)
     
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
 
-        // set view
+        // Set UICollectionView
         isPagingEnabled = true
         allowsSelection = true
         allowsMultipleSelection = false
@@ -61,7 +61,7 @@ class HJCalendarView: UICollectionView {
 
         
    
-        // set layout
+        // Set UICollectionViewFlowLayout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0.0
@@ -70,11 +70,11 @@ class HJCalendarView: UICollectionView {
         self.collectionViewLayout = layout
 
 
-        // register cell
+        // Register HJCalendarViewCell
         self.register(HJCalendarViewCell.self, forCellWithReuseIdentifier: "HJCalendarViewCell")
         
         
-        // init HJCalendar array
+        // Init HJCalendar array
         for _ in 0..<3 {
             calendarArray.append(HJCalendar())
         }
@@ -183,16 +183,16 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
         let dateIndex = cellIndex - calendarArray[indexPath.section].getWeekOfFirstDay()
         
         if cellIndex < 0 {
-            calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: nil)
+            calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
         }
         if dateIndex >= 0 && dateIndex < calendarArray[indexPath.section].getNumberOfDay() {
             
-            let comp = DateComponents(year: calendarArray[1].getYear(), month: calendarArray[1].getMonth(), day: dateIndex + 1)
-            calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: HJCalendar.calendar.date(from: comp))
+            let dateComponents = DateComponents(year: calendarArray[1].getYear(), month: calendarArray[1].getMonth(), day: dateIndex + 1)
+            calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: dateComponents)
             
         }
         else {
-            calendarDelegate?.didSelectDay(self, indexPath: indexPath, date: nil)
+            calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
         }
         
     }
@@ -247,17 +247,15 @@ extension HJCalendarView: UICollectionViewDataSource {
         }
         else if dateIndex >= 0 && dateIndex < calendarArray[indexPath.section].getNumberOfDay() {
             
-            
-            
             // 날짜 표시 텍스트
             cell.mainLabel.textColor = dateColor
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(dateIndex + 1)"
             
-            cell.subLabel.text = calendarDataSource?.calendarView(self, indexPath: indexPath, date:nil)
+            let dataComponents = DateComponents(year: calendarArray[1].getYear(), month: calendarArray[1].getMonth(), day: dateIndex + 1)
             
-            let comp = DateComponents(year: calendarArray[1].getYear(), month: calendarArray[1].getMonth(), day: dateIndex + 1)
-            cell.date = HJCalendar.calendar.date(from: comp)
+            cell.dateComponents = dataComponents
+            cell.subLabel.text = calendarDataSource?.calendarView(self, indexPath: indexPath, dateComponents:dataComponents)
         }
         else {
             // 빈킨 표시 텍스트
