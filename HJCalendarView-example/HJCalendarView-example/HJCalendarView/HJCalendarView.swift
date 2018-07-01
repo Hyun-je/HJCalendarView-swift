@@ -13,7 +13,7 @@ import UIKit
 
 protocol HJCalendarViewDelegate: NSObjectProtocol {
     
-    func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int)
+    func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?)
     
     func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?)
 
@@ -92,9 +92,27 @@ class HJCalendarView: UICollectionView {
     }
     
     
+    func setCalendarToday() {
+
+        // Init HJCalendar array
+        for i in 0..<3 {
+            calendarArray[i] = HJCalendar()
+        }
+        
+        calendarArray[0].setPreviousMonth()
+        calendarArray[2].setNextMonth()
+        
+        DispatchQueue.main.async {
+            self.reloadData()
+            
+            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
+            self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+        }
+        
+        
+    }
     
-    
-    func setCurrentCalendar(year: Int, month: Int) {
+    func setCalendar(year: Int, month: Int) {
 
         for i in 0..<3 {
             calendarArray[i] = HJCalendar(year: year, month: month)
@@ -103,20 +121,20 @@ class HJCalendarView: UICollectionView {
         calendarArray[0].setPreviousMonth()
         calendarArray[2].setNextMonth()
         
+        DispatchQueue.main.async {
+            self.reloadData()
+            
+            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
+            self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+        }
+        
     }
     
-    func getCurrentCalendar() -> (year: Int?, month: Int?) {
+    func getCalendar() -> (year: Int?, month: Int?) {
 
         return (calendarArray[1].getYear(), calendarArray[1].getMonth())
         
     }
-
-    func setCount(date: Date, count: Int) {
-    
-        
-    
-    }
-
 
 }
 
@@ -142,8 +160,8 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             let indexPath = IndexPath(row: 0, section: 1)
             self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
             
-            calendarDelegate?.didChangeCalendar(self, year: calendarArray[1].getYear()!, month: calendarArray[1].getMonth()!)
-
+            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
+            calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
         }
     }
@@ -169,7 +187,8 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
                 
             }
             
-            calendarDelegate?.didChangeCalendar(self, year: calendarArray[1].getYear()!, month: calendarArray[1].getMonth()!)
+            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
+            calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
         }
         

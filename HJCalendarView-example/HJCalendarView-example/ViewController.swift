@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDataSource {
-    
+
 
     @IBOutlet weak var calendarView: HJCalendarView!
     @IBOutlet weak var calendarLabel: UILabel!
@@ -23,7 +23,7 @@ class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDa
         calendarView.calendarDelegate = self
         calendarView.calendarDataSource = self
         
-        calendarView.setCurrentCalendar(year: 2018, month: 4)
+        calendarView.setCalendar(year: 2018, month: 4)
         
     }
 
@@ -36,11 +36,16 @@ class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDa
     
     
     
-    func didChangeCalendar(_ calendarView: HJCalendarView, year: Int, month: Int) {
+    func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?) {
         print(#function)
         
-        calendarLabel.text = "\(year) \(month)"
-        calendarSelectionLabel.text = ""
+        if let year = dateComponents?.year,
+            let month = dateComponents?.month {
+            calendarLabel.text = "\(year) \(month)"
+            calendarSelectionLabel.text = ""
+        }
+        
+
         
     }
     

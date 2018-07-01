@@ -72,6 +72,12 @@ class HJCalendarViewCell: UICollectionViewCell {
     
     func setCellType(_ type:HJCalendarViewCellType) {
         
+        mainLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2)
+        
+        subLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height*3/4)
+        subLabel.center = CGPoint(x:frame.width/2 , y: frame.height*0.77)
+        subLabel.font = UIFont.systemFont(ofSize: frame.height*0.23)
+        
         switch type {
             
         case .DayHeaderCell:

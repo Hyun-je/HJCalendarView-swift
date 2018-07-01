@@ -12,8 +12,8 @@ import Foundation
 class HJCalendar {
     
     static let calendar = Calendar(identifier: .gregorian)
-    var date = Date()
     
+    var date = Date()
     var calendarCount = [Int](repeating: 0, count:31)
     
     
