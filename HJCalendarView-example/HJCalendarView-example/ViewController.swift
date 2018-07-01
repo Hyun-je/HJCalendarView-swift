@@ -8,7 +8,8 @@
 
 import UIKit
 
-class ViewController: UIViewController, HJCalendarViewDelegate {
+class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDataSource {
+    
 
     @IBOutlet weak var calendarView: HJCalendarView!
     @IBOutlet weak var calendarLabel: UILabel!
@@ -19,6 +20,7 @@ class ViewController: UIViewController, HJCalendarViewDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         
         calendarView.calendarDelegate = self
+        calendarView.calendarDataSource = self
         
         calendarView.setCurrentCalendar(year: 2018, month: 4)
         
@@ -50,6 +52,12 @@ class ViewController: UIViewController, HJCalendarViewDelegate {
     func didDeselectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) {
         
         let cell = calendarView.cellForItem(at: indexPath) as! HJCalendarViewCell
+        
+    }
+    
+    func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, date: Date?) -> String {
+        
+        return "test"
         
     }
 
