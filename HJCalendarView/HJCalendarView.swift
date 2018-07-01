@@ -298,6 +298,8 @@ extension HJCalendarView: UICollectionViewDataSource {
             // 빈킨 표시 텍스트
             cell.setCellType(.BlankCell)
         }
+        
+        HJCalendarViewCell.selectedBackgroundColor = selectionColor
 
         return cell
         

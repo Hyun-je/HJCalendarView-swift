@@ -41,7 +41,7 @@
                                         <color key="value" red="1" green="0.79661429588611121" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="selectionColor">
-                                        <color key="value" red="0.82616957591310713" green="0.93474607588087499" blue="0.99678979009166668" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="value" red="0.93042040878182453" green="0.94771120273346032" blue="0.9575916564111111" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
