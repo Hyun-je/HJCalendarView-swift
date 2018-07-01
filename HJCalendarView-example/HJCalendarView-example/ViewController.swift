@@ -61,8 +61,8 @@ class ViewController: UIViewController, HJCalendarViewDelegate, HJCalendarViewDa
             let month = dateComponents?.month,
             let day = dateComponents?.day {
             
-            print("\(year) \(month) \(day)")
 
+            
             if (year == 2018 && month == 3 && day == 15) {
                 
                 return "▪︎▪︎"

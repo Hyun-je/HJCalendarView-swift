@@ -179,15 +179,16 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
+        let calendarIndex = indexPath.section
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
-        let dateIndex = cellIndex - calendarArray[indexPath.section].getWeekOfFirstDay()
+        let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
         
         if cellIndex < 0 {
             calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
         }
-        if dateIndex >= 0 && dateIndex < calendarArray[indexPath.section].getNumberOfDay() {
+        if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
             
-            let dateComponents = DateComponents(year: calendarArray[1].getYear(), month: calendarArray[1].getMonth(), day: dateIndex + 1)
+            let dateComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
             calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: dateComponents)
             
         }
@@ -235,27 +236,28 @@ extension HJCalendarView: UICollectionViewDataSource {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HJCalendarViewCell", for: indexPath) as! HJCalendarViewCell
 
+        let calendarIndex = indexPath.section
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
-        let dateIndex = cellIndex - calendarArray[indexPath.section].getWeekOfFirstDay()
+        let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
 
-        
         if cellIndex < 0 {
             // 상단 주 표시 텍스트
             cell.mainLabel.text = stringWeek[cellIndex+7]
             cell.mainLabel.textColor = dayHeaderColor
             cell.setCellType(.DayHeaderCell)
         }
-        else if dateIndex >= 0 && dateIndex < calendarArray[indexPath.section].getNumberOfDay() {
+        else if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
             
             // 날짜 표시 텍스트
             cell.mainLabel.textColor = dateColor
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(dateIndex + 1)"
             
-            let dataComponents = DateComponents(year: calendarArray[1].getYear(), month: calendarArray[1].getMonth(), day: dateIndex + 1)
+            let dataComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
             
             cell.dateComponents = dataComponents
             cell.subLabel.text = calendarDataSource?.calendarView(self, indexPath: indexPath, dateComponents:dataComponents)
+
         }
         else {
             // 빈킨 표시 텍스트
