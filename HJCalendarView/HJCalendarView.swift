@@ -193,12 +193,12 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
             calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
+            let indexPath = IndexPath(row: 0, section: 1)
+            scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            
+            self.reloadData()
+            
         }
-        
-        let indexPath = IndexPath(row: 0, section: 1)
-        scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
-        
-        self.reloadData()
         
     }
     
