@@ -9,7 +9,7 @@
 import UIKit
 
 
-enum HJCalendarViewCellType {
+public enum HJCalendarViewCellType {
     
     case DayHeaderCell
     case DateCell
@@ -18,7 +18,7 @@ enum HJCalendarViewCellType {
 }
 
 
-class HJCalendarViewCell: UICollectionViewCell {
+public class HJCalendarViewCell: UICollectionViewCell {
     
     var dateComponents:DateComponents? = nil
     
