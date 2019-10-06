@@ -11,7 +11,7 @@ import UIKit
 
 
 
-protocol HJCalendarViewDelegate: NSObjectProtocol {
+public protocol HJCalendarViewDelegate: NSObjectProtocol {
     
     func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?)
     
@@ -19,7 +19,7 @@ protocol HJCalendarViewDelegate: NSObjectProtocol {
 
 }
 
-protocol HJCalendarViewDataSource: NSObjectProtocol {
+public protocol HJCalendarViewDataSource: NSObjectProtocol {
     
     func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) -> String
     
@@ -30,7 +30,7 @@ protocol HJCalendarViewDataSource: NSObjectProtocol {
 
 
 
-class HJCalendarView: UICollectionView {
+public class HJCalendarView: UICollectionView {
     
     weak var calendarDelegate: HJCalendarViewDelegate?
     weak var calendarDataSource: HJCalendarViewDataSource?
@@ -154,7 +154,7 @@ class HJCalendarView: UICollectionView {
 
 
 
-extension HJCalendarView: UICollectionViewDelegateFlowLayout {
+public extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
     override func didMoveToWindow() {
         super.didMoveToWindow()
@@ -232,7 +232,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
 
 
-extension HJCalendarView: UICollectionViewDataSource {
+public extension HJCalendarView: UICollectionViewDataSource {
     
     func collectionViewIndexTransform(index:Int) -> Int {
         
