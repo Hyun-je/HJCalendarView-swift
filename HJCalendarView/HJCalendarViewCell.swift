@@ -9,7 +9,7 @@
 import UIKit
 
 
-public enum HJCalendarViewCellType {
+enum HJCalendarViewCellType {
     
     case DayHeaderCell
     case DateCell
@@ -18,7 +18,7 @@ public enum HJCalendarViewCellType {
 }
 
 
-public class HJCalendarViewCell: UICollectionViewCell {
+class HJCalendarViewCell: UICollectionViewCell {
     
     var dateComponents:DateComponents? = nil
     
@@ -37,7 +37,7 @@ public class HJCalendarViewCell: UICollectionViewCell {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        
+
         
         // Set selectedBackgroundView
         //
@@ -70,7 +70,7 @@ public class HJCalendarViewCell: UICollectionViewCell {
     
     
     
-    func setCellType(_ type:HJCalendarViewCellType) {
+    public func setCellType(_ type:HJCalendarViewCellType) {
         
         mainLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2)
         
@@ -104,6 +104,6 @@ public class HJCalendarViewCell: UICollectionViewCell {
         }
         
     }
-    
+
     
 }
