@@ -16,7 +16,7 @@ public protocol HJCalendarViewDelegate: NSObjectProtocol {
     func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?)
     
     func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?)
-
+    
 }
 
 public protocol HJCalendarViewDataSource: NSObjectProtocol {
@@ -38,7 +38,7 @@ public class HJCalendarView: UICollectionView {
     
     private let stringWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"]
     private var calendarArray = [HJCalendar]()
-
+    
     
     @IBInspectable var headerColor:UIColor     = UIColor.gray
     @IBInspectable var dayColor:UIColor        = UIColor.black
@@ -47,12 +47,12 @@ public class HJCalendarView: UICollectionView {
     @IBInspectable var subTextColor:UIColor    = UIColor.orange
     @IBInspectable var selectionColor:UIColor  = UIColor(white: 0.05, alpha: 0.1)
     
-
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-
+        
         // Set UICollectionView
         isPagingEnabled = true
         allowsSelection = true
@@ -62,9 +62,9 @@ public class HJCalendarView: UICollectionView {
         showsHorizontalScrollIndicator = false
         
         clipsToBounds = true
-
         
-   
+        
+        
         // Set UICollectionViewFlowLayout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -72,8 +72,8 @@ public class HJCalendarView: UICollectionView {
         layout.minimumInteritemSpacing = 0.0
         
         self.collectionViewLayout = layout
-
-
+        
+        
         // Register HJCalendarViewCell
         self.register(HJCalendarViewCell.self, forCellWithReuseIdentifier: "HJCalendarViewCell")
         
@@ -93,7 +93,7 @@ public class HJCalendarView: UICollectionView {
     
     
     func setCalendarToday() {
-
+        
         // Init HJCalendar array
         for i in 0..<3 {
             calendarArray[i] = HJCalendar()
@@ -118,7 +118,7 @@ public class HJCalendarView: UICollectionView {
     }
     
     func setCalendar(year: Int, month: Int) {
-
+        
         for i in 0..<3 {
             calendarArray[i] = HJCalendar(year: year, month: month)
         }
@@ -141,11 +141,11 @@ public class HJCalendarView: UICollectionView {
     }
     
     func getCalendar() -> (year: Int?, month: Int?) {
-
+        
         return (calendarArray[1].getYear(), calendarArray[1].getMonth())
         
     }
-
+    
 }
 
 
@@ -154,13 +154,13 @@ public class HJCalendarView: UICollectionView {
 
 
 
-public extension HJCalendarView: UICollectionViewDelegateFlowLayout {
-
-    override func didMoveToWindow() {
+extension HJCalendarView: UICollectionViewDelegateFlowLayout {
+    
+    override public func didMoveToWindow() {
         super.didMoveToWindow()
-
+        
         DispatchQueue.main.async {
-
+            
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
@@ -168,7 +168,7 @@ public extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
             
         }
-
+        
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -204,7 +204,7 @@ public extension HJCalendarView: UICollectionViewDelegateFlowLayout {
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
+        
         let calendarIndex = indexPath.section
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
         let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
@@ -223,7 +223,7 @@ public extension HJCalendarView: UICollectionViewDelegateFlowLayout {
         }
         
     }
-
+    
     
 }
 
@@ -232,7 +232,7 @@ public extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
 
 
-public extension HJCalendarView: UICollectionViewDataSource {
+extension HJCalendarView: UICollectionViewDataSource {
     
     func collectionViewIndexTransform(index:Int) -> Int {
         
@@ -247,7 +247,7 @@ public extension HJCalendarView: UICollectionViewDataSource {
         return 3
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 49
     }
     
@@ -258,14 +258,14 @@ public extension HJCalendarView: UICollectionViewDataSource {
         
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HJCalendarViewCell", for: indexPath) as! HJCalendarViewCell
-
+        
         let calendarIndex = indexPath.section
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
         let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
-
+        
         if cellIndex < 0 {
             // 상단 주 표시 텍스트
             cell.mainLabel.text = stringWeek[cellIndex+7]
@@ -277,7 +277,7 @@ public extension HJCalendarView: UICollectionViewDataSource {
             // 날짜 표시 텍스트
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(dateIndex + 1)"
-
+            
             // 주말 표시
             if cellIndex % 7 == 0 {
                 cell.mainLabel.textColor = sundayColor
@@ -303,7 +303,7 @@ public extension HJCalendarView: UICollectionViewDataSource {
         }
         
         HJCalendarViewCell.selectedBackgroundColor = selectionColor
-
+        
         return cell
         
     }

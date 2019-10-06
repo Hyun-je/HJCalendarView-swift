@@ -37,7 +37,7 @@ public class HJCalendarViewCell: UICollectionViewCell {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-
+        
         
         // Set selectedBackgroundView
         //
@@ -104,6 +104,6 @@ public class HJCalendarViewCell: UICollectionViewCell {
         }
         
     }
-
+    
     
 }
