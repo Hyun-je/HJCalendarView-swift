@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -12,9 +12,7 @@
 		9633327320E50B1200A6667C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9633327120E50B1200A6667C /* Main.storyboard */; };
 		9633327520E50B1300A6667C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9633327420E50B1300A6667C /* Assets.xcassets */; };
 		9633327820E50B1300A6667C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9633327620E50B1300A6667C /* LaunchScreen.storyboard */; };
-		967A1AB920E87D87009D6567 /* HJCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967A1AB620E87D87009D6567 /* HJCalendar.swift */; };
-		967A1ABA20E87D87009D6567 /* HJCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967A1AB720E87D87009D6567 /* HJCalendarView.swift */; };
-		967A1ABB20E87D87009D6567 /* HJCalendarViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967A1AB820E87D87009D6567 /* HJCalendarViewCell.swift */; };
+		B6A596D5234A0D690058B0E5 /* HJCalendarView in Frameworks */ = {isa = PBXBuildFile; productRef = B6A596D4234A0D690058B0E5 /* HJCalendarView */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,9 +23,6 @@
 		9633327420E50B1300A6667C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9633327720E50B1300A6667C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9633327920E50B1300A6667C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		967A1AB620E87D87009D6567 /* HJCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HJCalendar.swift; sourceTree = "<group>"; };
-		967A1AB720E87D87009D6567 /* HJCalendarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HJCalendarView.swift; sourceTree = "<group>"; };
-		967A1AB820E87D87009D6567 /* HJCalendarViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HJCalendarViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B6A596D5234A0D690058B0E5 /* HJCalendarView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +42,7 @@
 			children = (
 				9633326C20E50B1200A6667C /* HJCalendarView-example */,
 				9633326B20E50B1200A6667C /* Products */,
+				B6414797234A0959003F4672 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -62,7 +59,6 @@
 			children = (
 				9633326D20E50B1200A6667C /* AppDelegate.swift */,
 				9633326F20E50B1200A6667C /* ViewController.swift */,
-				967A1AB520E87D87009D6567 /* HJCalendarView */,
 				9633327420E50B1300A6667C /* Assets.xcassets */,
 				9633327120E50B1200A6667C /* Main.storyboard */,
 				9633327620E50B1300A6667C /* LaunchScreen.storyboard */,
@@ -71,14 +67,11 @@
 			path = "HJCalendarView-example";
 			sourceTree = "<group>";
 		};
-		967A1AB520E87D87009D6567 /* HJCalendarView */ = {
+		B6414797234A0959003F4672 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				967A1AB620E87D87009D6567 /* HJCalendar.swift */,
-				967A1AB720E87D87009D6567 /* HJCalendarView.swift */,
-				967A1AB820E87D87009D6567 /* HJCalendarViewCell.swift */,
 			);
-			path = HJCalendarView;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -97,6 +90,9 @@
 			dependencies = (
 			);
 			name = "HJCalendarView-example";
+			packageProductDependencies = (
+				B6A596D4234A0D690058B0E5 /* HJCalendarView */,
+			);
 			productName = "HJCalendarView-example";
 			productReference = 9633326A20E50B1200A6667C /* HJCalendarView-example.app */;
 			productType = "com.apple.product-type.application";
@@ -125,6 +121,9 @@
 				Base,
 			);
 			mainGroup = 9633326120E50B1200A6667C;
+			packageReferences = (
+				B6A596D3234A0D690058B0E5 /* XCRemoteSwiftPackageReference "HJCalendarView-swift" */,
+			);
 			productRefGroup = 9633326B20E50B1200A6667C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -154,9 +153,6 @@
 			files = (
 				9633327020E50B1200A6667C /* ViewController.swift in Sources */,
 				9633326E20E50B1200A6667C /* AppDelegate.swift in Sources */,
-				967A1ABA20E87D87009D6567 /* HJCalendarView.swift in Sources */,
-				967A1AB920E87D87009D6567 /* HJCalendar.swift in Sources */,
-				967A1ABB20E87D87009D6567 /* HJCalendarViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +297,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = G4WECBB963;
 				INFOPLIST_FILE = "HJCalendarView-example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -309,7 +306,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "example.HJCalendarView-example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -319,6 +316,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = G4WECBB963;
 				INFOPLIST_FILE = "HJCalendarView-example/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -327,7 +325,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "example.HJCalendarView-example";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -354,6 +352,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B6A596D3234A0D690058B0E5 /* XCRemoteSwiftPackageReference "HJCalendarView-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Hyun-je/HJCalendarView-swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B6A596D4234A0D690058B0E5 /* HJCalendarView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B6A596D3234A0D690058B0E5 /* XCRemoteSwiftPackageReference "HJCalendarView-swift" */;
+			productName = HJCalendarView;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9633326220E50B1200A6667C /* Project object */;
 }

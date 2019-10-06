@@ -30,7 +30,7 @@ protocol HJCalendarViewDataSource: NSObjectProtocol {
 
 
 
-class HJCalendarView: UICollectionView {
+public class HJCalendarView: UICollectionView {
     
     weak var calendarDelegate: HJCalendarViewDelegate?
     weak var calendarDataSource: HJCalendarViewDataSource?
@@ -110,7 +110,7 @@ class HJCalendarView: UICollectionView {
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
             let indexPath = IndexPath(row: 0, section: 1)
-            self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
             
         }
         
@@ -134,7 +134,7 @@ class HJCalendarView: UICollectionView {
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
             let indexPath = IndexPath(row: 0, section: 1)
-            self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
             
         }
         
@@ -165,7 +165,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
             let indexPath = IndexPath(row: 0, section: 1)
-            self.scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
             
         }
 
@@ -194,7 +194,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
             let indexPath = IndexPath(row: 0, section: 1)
-            scrollToItem(at: indexPath, at: UICollectionViewScrollPosition.left, animated: false)
+            scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
             
             self.reloadData()
             
