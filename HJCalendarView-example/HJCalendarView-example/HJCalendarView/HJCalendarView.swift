@@ -89,12 +89,9 @@ public class HJCalendarView: UICollectionView {
         
         
         // Init HJCalendar array
-        for _ in 0..<3 {
-            calendarArray.append(HJCalendar())
-        }
-        
-        calendarArray[0].setPreviousMonth()
-        calendarArray[2].setNextMonth()
+        calendarArray = [HJCalendar](repeating: HJCalendar(), count: 3)
+        calendarArray[0] = calendarArray[1].previousMonthCalendar()
+        calendarArray[2] = calendarArray[1].nextMonthCalendar()
         
         delegate = self
         dataSource = self
@@ -105,24 +102,21 @@ public class HJCalendarView: UICollectionView {
     public func setCalendarToday() {
 
         // Init HJCalendar array
-        for i in 0..<3 {
-            calendarArray[i] = HJCalendar()
-        }
+        calendarArray = [HJCalendar](repeating: HJCalendar(), count: 3)
+        calendarArray[0] = calendarArray[1].previousMonthCalendar()
+        calendarArray[2] = calendarArray[1].nextMonthCalendar()
         
-        calendarArray[0].setPreviousMonth()
-        calendarArray[2].setNextMonth()
+        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
         
         DispatchQueue.main.async {
             
             self.reloadData()
             self.layoutIfNeeded()
             
-            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
-            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
-            
-            
             let indexPath = IndexPath(row: 49/2, section: 1)
             self.scrollToItem(at: indexPath, at: .left, animated: false)
+            
+            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
         }
         
@@ -131,23 +125,21 @@ public class HJCalendarView: UICollectionView {
     
     public func setCalendar(year: Int, month: Int) {
 
-        for i in 0..<3 {
-            calendarArray[i] = HJCalendar(year: year, month: month)
-        }
+        calendarArray = [HJCalendar](repeating: HJCalendar(year: year, month: month), count: 3)
+        calendarArray[0] = calendarArray[1].previousMonthCalendar()
+        calendarArray[2] = calendarArray[1].nextMonthCalendar()
         
-        calendarArray[0].setPreviousMonth()
-        calendarArray[2].setNextMonth()
+        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
         
         DispatchQueue.main.async {
             
             self.reloadData()
             self.layoutIfNeeded()
             
-            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
-            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
-            
             let indexPath = IndexPath(row: 49/2, section: 1)
             self.scrollToItem(at: indexPath, at: .left, animated: false)
+            
+            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
         }
         
@@ -155,7 +147,7 @@ public class HJCalendarView: UICollectionView {
     
     public func getCalendar() -> (year: Int?, month: Int?) {
 
-        return (calendarArray[1].getYear(), calendarArray[1].getMonth())
+        return (calendarArray[1].year, calendarArray[1].month)
         
     }
 
@@ -172,15 +164,17 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
     override public func didMoveToWindow() {
         super.didMoveToWindow()
 
+        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
+        
         DispatchQueue.main.async {
 
-            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
-            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
-            
+            self.reloadData()
             self.layoutIfNeeded()
             
             let indexPath = IndexPath(row: 49/2, section: 1)
             self.scrollToItem(at: indexPath, at: .left, animated: false)
+            
+            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
         }
 
@@ -193,20 +187,21 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
         let scrollDirection = 1 - visibleIndexPath.section
         if scrollDirection != 0 {
+
             for i in 0..<3 {
                 
                 switch scrollDirection {
                 case 1:
-                    calendarArray[i].setPreviousMonth()
+                    calendarArray[i] = calendarArray[i].previousMonthCalendar()
                 case -1:
-                    calendarArray[i].setNextMonth()
+                    calendarArray[i] = calendarArray[i].nextMonthCalendar()
                 default:
                     break
                 }
                 
             }
             
-            let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
+            let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
             calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
             self.reloadData()
@@ -224,14 +219,14 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
         let calendarIndex = indexPath.section
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
-        let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
+        let dateIndex = cellIndex - calendarArray[calendarIndex].weekOfFirstDay
         
         if cellIndex < 0 {
             //calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
         }
-        if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
+        if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].numberOfDay {
             
-            let dateComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
+            let dateComponents = DateComponents(year: calendarArray[calendarIndex].year, month: calendarArray[calendarIndex].month, day: dateIndex + 1)
             calendarDelegate?.didSelectDay?(self, indexPath: indexPath, dateComponents: dateComponents)
             
         }
@@ -281,7 +276,7 @@ extension HJCalendarView: UICollectionViewDataSource {
 
         let calendarIndex = indexPath.section
         let cellIndex = collectionViewIndexTransform(index:indexPath.row)
-        let dateIndex = cellIndex - calendarArray[calendarIndex].getWeekOfFirstDay()
+        let dateIndex = cellIndex - calendarArray[calendarIndex].weekOfFirstDay
 
         if cellIndex < 0 {
             // 상단 주 표시 텍스트
@@ -289,7 +284,7 @@ extension HJCalendarView: UICollectionViewDataSource {
             cell.mainLabel.textColor = headerColor
             cell.setCellType(.DayHeaderCell)
         }
-        else if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
+        else if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].numberOfDay {
             
             // 날짜 표시 텍스트
             cell.setCellType(.DateCell)
@@ -307,7 +302,7 @@ extension HJCalendarView: UICollectionViewDataSource {
             }
             
             
-            let dataComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
+            let dataComponents = DateComponents(year: calendarArray[calendarIndex].year, month: calendarArray[calendarIndex].month, day: dateIndex + 1)
             
             cell.dateComponents = dataComponents
             cell.subLabel.text = calendarDataSource?.calendarView?(self, indexPath: indexPath, dateComponents:dataComponents)

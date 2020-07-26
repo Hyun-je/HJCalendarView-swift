@@ -9,15 +9,15 @@
 import Foundation
 
 
-class HJCalendar {
+struct HJCalendar {
     
     static let calendar = Calendar(identifier: .gregorian)
     
-    var date = Date()
-    var calendarCount = [Int](repeating: 0, count:31)
+    private var date = Date()
+    private var calendarCount = [Int](repeating: 0, count:31)
     
     
-    init() {
+    init(date: Date = Date()) {
         let comp: DateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: Calendar.current.startOfDay(for: date))
         if let date = HJCalendar.calendar.date(from: comp) {
             self.date = date
@@ -31,38 +31,42 @@ class HJCalendar {
         }
     }
     
-    func getYear() -> Int? {
+    
+    
+    var year: Int? {
         let comp: DateComponents = HJCalendar.calendar.dateComponents([.year], from: date as Date)
         return comp.year
     }
     
-    func getMonth() -> Int? {
+    var month: Int? {
         let comp: DateComponents = HJCalendar.calendar.dateComponents([.month], from: date as Date)
         return comp.month
     }
     
-    func getNumberOfDay() -> Int {
+    var numberOfDay: Int {
         let range = HJCalendar.calendar.range(of: .day, in: .month, for: date)!
         return range.count
-        
     }
     
-    func getWeekOfFirstDay() -> Int {
+    var weekOfFirstDay: Int {
         return HJCalendar.calendar.dateComponents([.weekday], from: date).weekday! - 1
     }
     
-    func setNextMonth() {
+
+    
+    
+    func nextMonthCalendar() -> HJCalendar {
         var periodComponents = DateComponents()
         periodComponents.month = 1
-        date = HJCalendar.calendar.date(byAdding: periodComponents, to: date)!
+        
+        return HJCalendar(date: HJCalendar.calendar.date(byAdding: periodComponents, to: date)!)
     }
-    
-    func setPreviousMonth() {
+
+    func previousMonthCalendar() -> HJCalendar {
         var periodComponents = DateComponents()
         periodComponents.month = -1
-        date = HJCalendar.calendar.date(byAdding: periodComponents, to: date)!
+        
+        return HJCalendar(date: HJCalendar.calendar.date(byAdding: periodComponents, to: date)!)
     }
-    
-    
     
 }
