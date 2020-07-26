@@ -48,11 +48,21 @@ public class HJCalendarView: UICollectionView {
     @IBInspectable var selectionColor:UIColor  = UIColor(white: 0.05, alpha: 0.1)
     
 
+    override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
+        super.init(frame: frame, collectionViewLayout: layout)
+        
+        setup()
+    }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-
+        setup()
+    }
+    
+    
+    private func setup() {
+        
         // Set UICollectionView
         isPagingEnabled = true
         allowsSelection = true
@@ -62,9 +72,9 @@ public class HJCalendarView: UICollectionView {
         showsHorizontalScrollIndicator = false
         
         clipsToBounds = true
-
         
-   
+        
+        
         // Set UICollectionViewFlowLayout
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -72,8 +82,8 @@ public class HJCalendarView: UICollectionView {
         layout.minimumInteritemSpacing = 0.0
         
         self.collectionViewLayout = layout
-
-
+        
+        
         // Register HJCalendarViewCell
         self.register(HJCalendarViewCell.self, forCellWithReuseIdentifier: "HJCalendarViewCell")
         
@@ -88,7 +98,7 @@ public class HJCalendarView: UICollectionView {
         
         delegate = self
         dataSource = self
-        
+
     }
     
     
@@ -105,12 +115,14 @@ public class HJCalendarView: UICollectionView {
         DispatchQueue.main.async {
             
             self.reloadData()
+            self.layoutIfNeeded()
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
-            let indexPath = IndexPath(row: 0, section: 1)
-            self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
+            
+            let indexPath = IndexPath(row: 49/2, section: 1)
+            self.scrollToItem(at: indexPath, at: .left, animated: false)
             
         }
         
@@ -129,12 +141,13 @@ public class HJCalendarView: UICollectionView {
         DispatchQueue.main.async {
             
             self.reloadData()
+            self.layoutIfNeeded()
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
-            let indexPath = IndexPath(row: 0, section: 1)
-            self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
+            let indexPath = IndexPath(row: 49/2, section: 1)
+            self.scrollToItem(at: indexPath, at: .left, animated: false)
             
         }
         
@@ -164,17 +177,20 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
             self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
-            let indexPath = IndexPath(row: 0, section: 1)
-            self.scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
+            self.layoutIfNeeded()
+            
+            let indexPath = IndexPath(row: 49/2, section: 1)
+            self.scrollToItem(at: indexPath, at: .left, animated: false)
             
         }
 
     }
     
+    
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
         let visibleIndexPath = indexPathsForVisibleItems[(indexPathsForVisibleItems.count-1)/2]
-        
+
         let scrollDirection = 1 - visibleIndexPath.section
         if scrollDirection != 0 {
             for i in 0..<3 {
@@ -193,10 +209,11 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
             calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
             
-            let indexPath = IndexPath(row: 0, section: 1)
-            scrollToItem(at: indexPath, at: UICollectionView.ScrollPosition.left, animated: false)
-            
             self.reloadData()
+            self.layoutIfNeeded()
+            
+            let indexPath = IndexPath(row: 49/2, section: 1)
+            scrollToItem(at: indexPath, at: .left, animated: false)
             
         }
         
