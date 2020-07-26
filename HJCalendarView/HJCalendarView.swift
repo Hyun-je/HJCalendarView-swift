@@ -11,17 +11,17 @@ import UIKit
 
 
 
-public protocol HJCalendarViewDelegate: NSObjectProtocol {
+@objc public protocol HJCalendarViewDelegate: NSObjectProtocol {
     
-    func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?)
+    @objc optional func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?)
     
-    func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?)
+    @objc optional func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?)
 
 }
 
-public protocol HJCalendarViewDataSource: NSObjectProtocol {
+@objc public protocol HJCalendarViewDataSource: NSObjectProtocol {
     
-    func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) -> String
+    @objc optional func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) -> String
     
     //func calendarView(_ calendarView: HJCalendarView, colorForItemAt indexPath: IndexPath, date:Date?) -> UIColor
     
@@ -118,7 +118,7 @@ public class HJCalendarView: UICollectionView {
             self.layoutIfNeeded()
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
-            self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
             
             let indexPath = IndexPath(row: 49/2, section: 1)
@@ -144,7 +144,7 @@ public class HJCalendarView: UICollectionView {
             self.layoutIfNeeded()
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
-            self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
             let indexPath = IndexPath(row: 49/2, section: 1)
             self.scrollToItem(at: indexPath, at: .left, animated: false)
@@ -175,7 +175,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
         DispatchQueue.main.async {
 
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: self.calendarArray[1].date)
-            self.calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
             self.layoutIfNeeded()
             
@@ -207,7 +207,7 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
             }
             
             let dateComponents = HJCalendar.calendar.dateComponents([.year, .month], from: calendarArray[1].date)
-            calendarDelegate?.didChangeCalendar(self, dateComponents: dateComponents)
+            calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
             self.reloadData()
             self.layoutIfNeeded()
@@ -232,11 +232,11 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
         if dateIndex >= 0 && dateIndex < calendarArray[calendarIndex].getNumberOfDay() {
             
             let dateComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
-            calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: dateComponents)
+            calendarDelegate?.didSelectDay?(self, indexPath: indexPath, dateComponents: dateComponents)
             
         }
         else {
-            calendarDelegate?.didSelectDay(self, indexPath: indexPath, dateComponents: nil)
+            calendarDelegate?.didSelectDay?(self, indexPath: indexPath, dateComponents: nil)
         }
         
     }
@@ -310,7 +310,7 @@ extension HJCalendarView: UICollectionViewDataSource {
             let dataComponents = DateComponents(year: calendarArray[calendarIndex].getYear(), month: calendarArray[calendarIndex].getMonth(), day: dateIndex + 1)
             
             cell.dateComponents = dataComponents
-            cell.subLabel.text = calendarDataSource?.calendarView(self, indexPath: indexPath, dateComponents:dataComponents)
+            cell.subLabel.text = calendarDataSource?.calendarView?(self, indexPath: indexPath, dateComponents:dataComponents)
             cell.subLabel.textColor = subTextColor
             
         }

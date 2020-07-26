@@ -70,7 +70,7 @@ class HJCalendarViewCell: UICollectionViewCell {
     
     
     
-    func setCellType(_ type:HJCalendarViewCellType) {
+    public func setCellType(_ type:HJCalendarViewCellType) {
         
         mainLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2)
         
