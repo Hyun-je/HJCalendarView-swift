@@ -19,8 +19,9 @@ enum HJCalendarViewCellType {
 
 
 class HJCalendarViewCell: UICollectionViewCell {
+    static let identifier = "HJCalendarViewCell"
     
-    var dateComponents:DateComponents? = nil
+    var dateComponents: DateComponents? = nil
     
     var mainLabel = UILabel()
     var subLabel = UILabel()
@@ -70,7 +71,7 @@ class HJCalendarViewCell: UICollectionViewCell {
     
     
     
-    public func setCellType(_ type:HJCalendarViewCellType) {
+    public func setCellType(_ type: HJCalendarViewCellType) {
         
         mainLabel.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height/2)
         

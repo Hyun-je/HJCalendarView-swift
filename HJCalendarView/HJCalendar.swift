@@ -14,7 +14,6 @@ struct HJCalendar {
     static let calendar = Calendar(identifier: .gregorian)
     
     private var date = Date()
-    private var calendarCount = [Int](repeating: 0, count:31)
     
     
     init(date: Date = Date()) {

@@ -85,7 +85,7 @@ public class HJCalendarView: UICollectionView {
         
         
         // Register HJCalendarViewCell
-        self.register(HJCalendarViewCell.self, forCellWithReuseIdentifier: "HJCalendarViewCell")
+        self.register(HJCalendarViewCell.self, forCellWithReuseIdentifier: HJCalendarViewCell.identifier)
         
         
         // Init HJCalendar array
@@ -99,29 +99,7 @@ public class HJCalendarView: UICollectionView {
     }
     
     
-    public func setCalendarToday() {
 
-        // Init HJCalendar array
-        calendarArray = [HJCalendar](repeating: HJCalendar(), count: 3)
-        calendarArray[0] = calendarArray[1].previousMonthCalendar()
-        calendarArray[2] = calendarArray[1].nextMonthCalendar()
-        
-        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
-        
-        DispatchQueue.main.async {
-            
-            self.reloadData()
-            self.layoutIfNeeded()
-            
-            let indexPath = IndexPath(row: 49/2, section: 1)
-            self.scrollToItem(at: indexPath, at: .left, animated: false)
-            
-            self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
-            
-        }
-        
-        
-    }
     
     public func setCalendar(year: Int, month: Int) {
 
@@ -141,6 +119,18 @@ public class HJCalendarView: UICollectionView {
             
             self.calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
+        }
+        
+    }
+    
+    public func setCalendarToday() {
+        
+        let calendar = HJCalendar()
+        
+        if  let year = calendar.year,
+            let month = calendar.month {
+            
+            setCalendar(year: year, month: month)
         }
         
     }
@@ -187,20 +177,16 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
 
         let scrollDirection = 1 - visibleIndexPath.section
         if scrollDirection != 0 {
-
-            for i in 0..<3 {
-                
-                switch scrollDirection {
-                case 1:
-                    calendarArray[i] = calendarArray[i].previousMonthCalendar()
-                case -1:
-                    calendarArray[i] = calendarArray[i].nextMonthCalendar()
-                default:
-                    break
-                }
-                
-            }
             
+            switch scrollDirection {
+            case 1:
+                calendarArray = calendarArray.map{ $0.previousMonthCalendar() }
+            case -1:
+                calendarArray = calendarArray.map{ $0.nextMonthCalendar() }
+            default:
+                break
+            }
+
             let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
             calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
             
@@ -252,7 +238,6 @@ extension HJCalendarView: UICollectionViewDataSource {
         let col = index%7
         
         return col*7 + row - 7
-        
     }
     
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
