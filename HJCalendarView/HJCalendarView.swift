@@ -43,10 +43,10 @@ public class HJCalendarView: UIView {
     
     private var calendarArray = [HJCalendar]()
     
-    let rows = 6
-    let columns = 7
+    private let rows = 6
+    private let columns = 7
     
-    var scrollDirection = UICollectionView.ScrollDirection.horizontal {
+    public var scrollDirection = UICollectionView.ScrollDirection.horizontal {
         
         didSet {
             DispatchQueue.main.async {
