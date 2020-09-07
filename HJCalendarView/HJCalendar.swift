@@ -54,14 +54,14 @@ struct HJCalendar {
 
     
     
-    func nextMonthCalendar() -> HJCalendar {
+    func nextMonth() -> HJCalendar {
         var periodComponents = DateComponents()
         periodComponents.month = 1
         
         return HJCalendar(date: HJCalendar.calendar.date(byAdding: periodComponents, to: date)!)
     }
 
-    func previousMonthCalendar() -> HJCalendar {
+    func previousMonth() -> HJCalendar {
         var periodComponents = DateComponents()
         periodComponents.month = -1
         
