@@ -209,6 +209,13 @@ extension HJCalendarView {
         
     }
     
+    public func refreshCalendar() {
+        
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+    
 }
 
 
