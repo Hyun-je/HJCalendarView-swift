@@ -267,8 +267,8 @@ extension HJCalendarView: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
         return CGSize(
-            width: collectionView.frame.width / CGFloat(columns),
-            height: collectionView.frame.height / CGFloat(rows)
+            width: collectionView.frame.width / CGFloat(columns) - 0.0001,
+            height: collectionView.frame.height / CGFloat(rows) - 0.0001
         )
     }
     
@@ -312,6 +312,8 @@ extension HJCalendarView: UICollectionViewDataSource, UICollectionViewDelegate {
             // 날짜 표시 텍스트
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(day)"
+            
+            print(calendar.month, day)
 
             // 주말 표시
             if cellIndex % 7 == 0 {
