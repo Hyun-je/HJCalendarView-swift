@@ -313,8 +313,6 @@ extension HJCalendarView: UICollectionViewDataSource, UICollectionViewDelegate {
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(day)"
             
-            print(calendar.month, day)
-
             // 주말 표시
             if cellIndex % 7 == 0 {
                 cell.mainLabel.textColor = sundayColor
