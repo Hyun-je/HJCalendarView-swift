@@ -86,7 +86,9 @@ public class HJCalendarView: UIView {
         view.translatesAutoresizingMaskIntoConstraints = false
         
         view.backgroundColor = .clear
+        #if os(iOS)
         view.isPagingEnabled = true
+        #endif
         view.allowsSelection = true
         view.allowsMultipleSelection = false
         view.showsVerticalScrollIndicator = false

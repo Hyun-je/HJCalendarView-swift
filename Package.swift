@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "HJCalendarView",
     platforms: [
-        .macOS(.v10_12), .iOS(.v11)
+        .iOS(.v11)
     ],
     products: [
         .library(
