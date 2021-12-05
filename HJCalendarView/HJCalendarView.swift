@@ -12,15 +12,15 @@ import UIKit
 
 @objc public protocol HJCalendarViewDelegate: NSObjectProtocol {
     
-    @objc optional func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents?)
+    @objc optional func didChangeCalendar(_ calendarView: HJCalendarView, dateComponents: DateComponents)
     
-    @objc optional func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?)
+    @objc optional func didSelectDay(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents: DateComponents?)
 
 }
 
 @objc public protocol HJCalendarViewDataSource: NSObjectProtocol {
-    
-    @objc optional func calendarView(_ calendarView: HJCalendarView, indexPath: IndexPath, dateComponents:DateComponents?) -> String
+
+    @objc optional func calendarView(_ calendarView: HJCalendarView, dateComponentsArray: [DateComponents]) -> [DateComponents:String]
 
 }
 
@@ -41,7 +41,8 @@ public class HJCalendarView: UIView {
     public weak var calendarDataSource: HJCalendarViewDataSource?
     
     
-    private var calendarArray = [HJCalendar]()
+    private var calendarArray = [HJCalendarData]()
+    private var calendarString = [DateComponents:String]()
     
     private let rows = 6
     private let columns = 7
@@ -141,7 +142,6 @@ public class HJCalendarView: UIView {
         ])
 
         setCalendarToday()
-
     }
     
 
@@ -183,25 +183,17 @@ extension HJCalendarView {
     public func setCalendar(year: Int, month: Int) {
         
         calendarArray = [
-            HJCalendar(year: year, month: month).previousMonth(),
-            HJCalendar(year: year, month: month),
-            HJCalendar(year: year, month: month).nextMonth()
+            HJCalendarData(year: year, month: month).previousMonth(),
+            HJCalendarData(year: year, month: month),
+            HJCalendarData(year: year, month: month).nextMonth()
         ]
 
-        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
-        
-        DispatchQueue.main.async {
-            self.collectionView.reloadData()
-            self.scrollToCenterPage()
-        }
-        
-        calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
-        
+        reloadCalendar()
     }
     
     public func setCalendarToday() {
         
-        let calendar = HJCalendar()
+        let calendar = HJCalendarData()
         
         if  let year = calendar.year,
             let month = calendar.month {
@@ -211,11 +203,27 @@ extension HJCalendarView {
         
     }
     
-    public func refreshCalendar() {
+    public func reloadCalendar() {
         
+        var dateComponentsArray = [DateComponents]()
+        
+        for calendar in calendarArray {
+            for day in 1...calendar.numberOfDay {
+                dateComponentsArray.append(DateComponents(year: calendar.year, month: calendar.month, day: day))
+            }
+        }
+        
+        if let calendarDataSource = self.calendarDataSource?.calendarView {
+            calendarString = calendarDataSource(self, dateComponentsArray)
+        }
+
         DispatchQueue.main.async {
             self.collectionView.reloadData()
+            self.scrollToCenterPage()
         }
+        
+        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
+        calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
     }
     
 }
@@ -250,12 +258,7 @@ extension HJCalendarView: UIScrollViewDelegate {
                 break
             }
             
-            collectionView.reloadData()
-            scrollToCenterPage()
-            
-            let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
-            calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
-            
+            reloadCalendar()
         }
         
     }
@@ -311,25 +314,19 @@ extension HJCalendarView: UICollectionViewDataSource, UICollectionViewDelegate {
 
         if day > 0 && day <= calendar.numberOfDay {
             
-            // 날짜 표시 텍스트
             cell.setCellType(.DateCell)
             cell.mainLabel.text = "\(day)"
             
-            // 주말 표시
-            if cellIndex % 7 == 0 {
-                cell.mainLabel.textColor = sundayColor
+            switch cellIndex % 7 {
+            case 0:     cell.mainLabel.textColor = sundayColor
+            case 6:     cell.mainLabel.textColor = saturdayColor
+            default:    cell.mainLabel.textColor = dayColor
             }
-            else if cellIndex % 7 == 6 {
-                cell.mainLabel.textColor = saturdayColor
-            }
-            else {
-                cell.mainLabel.textColor = dayColor
-            }
-            
             
             let dataComponents = DateComponents(year: calendar.year, month: calendar.month, day: day)
             
-            cell.subLabel.text = calendarDataSource?.calendarView?(self, indexPath: indexPath, dateComponents: dataComponents)
+            cell.subLabel.text = calendarString[dataComponents]
+            //cell.subLabel.text = calendarDataSource?.calendarView?(self, indexPath: indexPath, dateComponents: dataComponents)
             cell.subLabel.textColor = subTextColor
             
         }
