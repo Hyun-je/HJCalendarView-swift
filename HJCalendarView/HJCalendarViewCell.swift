@@ -84,7 +84,7 @@ class HJCalendarViewCell: UICollectionViewCell {
         
         selectedBackgroundView?.layer.cornerRadius = length / 5.0
         
-        mainLabel.font = .systemFont(ofSize: length / 3, weight: .medium)
+        mainLabel.font = .systemFont(ofSize: length / 2.5, weight: .medium)
         subLabel.font = .systemFont(ofSize: length / 5, weight: .regular)
     }
     

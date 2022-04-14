@@ -32,10 +32,10 @@ public class HJCalendarView: UIView {
     
     @IBInspectable var headerColor     = UIColor.gray
     @IBInspectable var dayColor        = UIColor.black
-    @IBInspectable var saturdayColor   = UIColor.blue
-    @IBInspectable var sundayColor     = UIColor.red
-    @IBInspectable var subTextColor    = UIColor.orange
-    @IBInspectable var selectionColor  = UIColor(white: 0.05, alpha: 0.1)
+    @IBInspectable var saturdayColor   = UIColor(red: 0.3, green: 0.3, blue: 0.9, alpha: 1.0)
+    @IBInspectable var sundayColor     = UIColor(red: 0.9, green: 0.3, blue: 0.3, alpha: 1.0)
+    @IBInspectable var subTextColor    = UIColor(red: 0.6, green: 0.8, blue: 0.3, alpha: 1.0)
+    @IBInspectable var selectionColor  = UIColor(white: 0.5, alpha: 0.1)
     
     public weak var calendarDelegate: HJCalendarViewDelegate?
     public weak var calendarDataSource: HJCalendarViewDataSource?
@@ -141,7 +141,7 @@ public class HJCalendarView: UIView {
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
 
-        setCalendarToday()
+        setCalendarToday(notify: true)
     }
     
 
@@ -180,7 +180,7 @@ extension HJCalendarView {
         return (calendarArray[1].year, calendarArray[1].month)
     }
     
-    public func setCalendar(year: Int, month: Int) {
+    public func setCalendar(year: Int, month: Int, notify: Bool = true) {
         
         calendarArray = [
             HJCalendarData(year: year, month: month).previousMonth(),
@@ -188,22 +188,22 @@ extension HJCalendarView {
             HJCalendarData(year: year, month: month).nextMonth()
         ]
 
-        reloadCalendar()
+        reloadCalendar(notify: notify)
     }
     
-    public func setCalendarToday() {
+    public func setCalendarToday(notify: Bool = true) {
         
         let calendar = HJCalendarData()
         
         if  let year = calendar.year,
             let month = calendar.month {
             
-            setCalendar(year: year, month: month)
+            setCalendar(year: year, month: month, notify: notify)
         }
         
     }
     
-    public func reloadCalendar() {
+    public func reloadCalendar(notify: Bool = true) {
         
         var dateComponentsArray = [DateComponents]()
         
@@ -222,8 +222,10 @@ extension HJCalendarView {
             self.scrollToCenterPage()
         }
         
-        let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
-        calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
+        if notify {
+            let dateComponents = DateComponents(year: calendarArray[1].year, month: calendarArray[1].month)
+            calendarDelegate?.didChangeCalendar?(self, dateComponents: dateComponents)
+        }
     }
     
 }
