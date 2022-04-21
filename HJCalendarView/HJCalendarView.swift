@@ -354,9 +354,6 @@ extension HJCalendarView: UICollectionViewDataSource, UICollectionViewDelegate {
             calendarDelegate?.didSelectDay?(self, indexPath: indexPath, dateComponents: dateComponents)
             
         }
-        else {
-            calendarDelegate?.didSelectDay?(self, indexPath: indexPath, dateComponents: nil)
-        }
         
     }
     
